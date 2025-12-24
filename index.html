@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>Raport frecvență elevi</title>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style>
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  background:#f5f7fb;
+  color:#222;
+  margin:0;
+  padding:20px;
+}
+.container{
+  max-width:1200px;
+  margin:auto;
+}
+h1{
+  margin:0;
+}
+.subtitle{
+  color:#555;
+  margin-bottom:20px;
+}
+.card{
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:16px;
+  margin-bottom:20px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+}
+label{
+  font-size:13px;
+  color:#555;
+}
+input{
+  width:100%;
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:14px;
+}
+.summary{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.box{
+  padding:10px 14px;
+  background:#f0f3f9;
+  border-radius:6px;
+}
+button{
+  padding:8px 14px;
+  border:1px solid #ccc;
+  background:#fff;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+}
+button:hover{
+  background:#f0f0f0;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+}
+th,td{
+  border:1px solid #ccc;
+  padding:8px;
+  font-size:13px;
+}
+th{
+  background:#eef2f7;
+}
+td.num{
+  text-align:right;
+}
+td input{
+  width:80px;
+}
+.red{
+  border-color:red !important;
+}
+.note{
+  font-size:12px;
+  color:#666;
+  margin-top:8px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>Raport cu privire la frecvența elevilor</h1>
+<div class="subtitle"></div>
+
+<div class="card">
+  <div class="grid">
+    <div>
+      <label>Clasa</label>
+      <input id="clasa" value="7E">
+    </div>
+    <div>
+      <label>Nr. elevi</label>
+      <input id="nrElevi" type="number" value="21">
+    </div>
+    <div>
+      <label>Ore / săptămână</label>
+      <input id="oreSapt" type="number" value="30">
+    </div>
+    <div>
+      <label>Nr. săptămâni</label>
+      <input id="nrSapt" type="number" value="15">
+    </div>
+    <div>
+      <label>Ore suplimentare (total)</label>
+      <input id="oreSupl" type="number" value="19">
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="box">Ore per elev: <b id="perElev">0</b></div>
+    <div class="box">Formula: <b id="formula"></b></div>
+    <button onclick="exportExcel()">Export Excel</button>
+    <button onclick="exportWord()">Export Word</button>
+  </div>
+
+  <div class="note">
+   
+  </div>
+</div>
+
+<div class="card">
+<table id="tabel">
+<thead>
+<tr>
+  <th>Semestrul</th>
+  <th>Nr. elevi</th>
+  <th>Nr. ore ce trebuiau frecventate</th>
+  <th>Ore lipsă (total)</th>
+  <th>Frecvența %</th>
+  <th>Ore lipsă / elev</th>
+  <th>Boală</th><th>%</th>
+  <th>Motivate</th><th>%</th>
+  <th>Nemotivate</th><th>%</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+<div class="note">
+  Dacă boală + motivate + nemotivate &gt; total lipsă → câmpurile devin roșii.
+</div>
+</div>
+
+</div>
+
+<script>
+const randuri=["I","II","anual","școlarizare","abandon"];
+
+function calculeaza(){
+  const ne=+nrElevi.value;
+  const per=+oreSapt.value*+nrSapt.value+ +oreSupl.value;
+  perElev.textContent=per;
+  formula.textContent=`${oreSapt.value}×${nrSapt.value} + ${oreSupl.value} = ${per}`;
+  return {per, total: per*ne};
+}
+
+function construieste(){
+  tbody.innerHTML="";
+  const c=calculeaza();
+  randuri.forEach(r=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${r}</td>
+      <td class="num">${nrElevi.value}</td>
+      <td class="num">${c.total}</td>
+      <td><input type="number" value="0"></td>
+      <td class="num">100.00</td>
+      <td class="num">0.00</td>
+      <td><input type="number" value="0"></td><td class="num">0.00</td>
+      <td><input type="number" value="0"></td><td class="num">0.00</td>
+      <td><input type="number" value="0"></td><td class="num">0.00</td>
+    `;
+    tbody.appendChild(tr);
+    tr.querySelectorAll("input").forEach(i=>i.oninput=()=>recalc(tr,c));
+  });
+}
+
+function recalc(tr,c){
+  const ne=+nrElevi.value;
+  const totalClasa=c.total;
+  const lipsa=+tr.children[3].firstChild.value;
+  const boala=+tr.children[6].firstChild.value;
+  const motiv=+tr.children[8].firstChild.value;
+  const nemotiv=+tr.children[10].firstChild.value;
+
+  tr.children[4].textContent=((totalClasa-lipsa)/totalClasa*100).toFixed(2);
+  tr.children[5].textContent=(lipsa/ne).toFixed(2);
+
+  tr.children[7].textContent=lipsa?((boala/lipsa)*100).toFixed(2):"0.00";
+  tr.children[9].textContent=lipsa?((motiv/lipsa)*100).toFixed(2):"0.00";
+  tr.children[11].textContent=lipsa?((nemotiv/lipsa)*100).toFixed(2):"0.00";
+
+  [tr.children[6].firstChild,tr.children[8].firstChild,tr.children[10].firstChild]
+    .forEach(i=>i.classList.remove("red"));
+
+  if(boala+motiv+nemotiv>lipsa){
+    [tr.children[6].firstChild,tr.children[8].firstChild,tr.children[10].firstChild]
+      .forEach(i=>i.classList.add("red"));
+  }
+}
+
+function exportExcel(){
+  // ia parametrii
+  const clasa = (document.getElementById("clasa").value || "").trim();
+  const ne = +document.getElementById("nrElevi").value || 0;
+  const os = +document.getElementById("oreSapt").value || 0;
+  const ns = +document.getElementById("nrSapt").value || 0;
+  const supl = +document.getElementById("oreSupl").value || 0;
+
+  const perElev = os * ns + supl;
+  const totalClasa = perElev * ne;
+
+  // header EXACT cum vrei în Excel (coloane fixe)
+  const aoa = [
+    ["Semestrul","Nr. elevi","Nr. ore ce trebuiau frecventate","Ore lipsă (total)","Frecvența %","Ore lipsă / elev",
+     "Boală (ore)","Boală (%)","Motivate (ore)","Motivate (%)","Nemotivate (ore)","Nemotivate (%)"]
+  ];
+
+  // parcurge rândurile din tbody
+  document.querySelectorAll("#tbody tr").forEach(tr => {
+    const sem = tr.children[0].textContent.trim();
+    const nrElevi = tr.children[1].textContent.trim();
+    const orePlan = tr.children[2].textContent.trim();
+
+    const lipsaTotal = tr.children[3].querySelector("input").value;     // INPUT
+    const frecvPct   = tr.children[4].textContent.trim();              // TEXT
+    const lipsaElev  = tr.children[5].textContent.trim();              // TEXT
+
+    const boalaOre   = tr.children[6].querySelector("input").value;     // INPUT
+    const boalaPct   = tr.children[7].textContent.trim();              // TEXT
+
+    const motivOre   = tr.children[8].querySelector("input").value;     // INPUT
+    const motivPct   = tr.children[9].textContent.trim();              // TEXT
+
+    const nemotivOre = tr.children[10].querySelector("input").value;    // INPUT
+    const nemotivPct = tr.children[11].textContent.trim();             // TEXT
+
+    aoa.push([sem, nrElevi, orePlan, lipsaTotal, frecvPct, lipsaElev,
+              boalaOre, boalaPct, motivOre, motivPct, nemotivOre, nemotivPct]);
+  });
+
+  // creează workbook
+  const wb = XLSX.utils.book_new();
+
+  // foaie 1: raport
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  XLSX.utils.book_append_sheet(wb, ws, "Raport");
+
+  // foaie 2: parametri (opțional, util)
+  const meta = [
+    ["Clasa", clasa],
+    ["Nr. elevi", ne],
+    ["Ore / săptămână", os],
+    ["Nr. săptămâni", ns],
+    ["Ore suplimentare", supl],
+    ["Total per elev", perElev],
+    ["Total clasă", totalClasa],
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(meta), "Parametri");
+
+  XLSX.writeFile(wb, `raport_frecventa_${clasa || "clasa"}.xlsx`);
+}
+
+construieste();
+</script>
+</body>
+</html>
