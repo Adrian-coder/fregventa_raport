@@ -1,285 +1,508 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teste Certiport Networking 1–246</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Raport frecvență elevi</title>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#eef2f7;color:#1f2937}
-.app{width:100%;max-width:980px;margin:0 auto;min-height:100vh;padding:16px;display:flex;align-items:center;justify-content:center}
-.card{width:100%;background:#fff;border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
-.header{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;border-bottom:1px solid #e5e7eb;padding-bottom:16px;margin-bottom:20px}
-h1,h2,h3{margin-top:0} h1{margin-bottom:6px;font-size:26px;line-height:1.2}
-.small{margin:4px 0 0;color:#6b7280;font-size:14px;line-height:1.35}
-.badge{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:8px 12px;border-radius:999px;font-size:14px;white-space:nowrap}
-.menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:20px}
-.mixed-box{margin-top:16px;border:1px solid #d1d5db;background:#f9fafb;border-radius:16px;padding:16px}
-.mixed-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.mixed-row input{width:150px;border:1px solid #d1d5db;border-radius:12px;padding:12px;font-size:16px}
-.mixed-box p{margin:8px 0 0;color:#6b7280;font-size:14px;line-height:1.35}
-.test-link{border:1px solid #d1d5db;background:#f9fafb;border-radius:16px;padding:18px;text-align:left;cursor:pointer;transition:.15s;min-height:110px}
-.test-link:hover{background:#eff6ff;border-color:#60a5fa;transform:translateY(-1px)}
-.test-link strong{display:block;font-size:19px;margin-bottom:8px} .test-link span{color:#6b7280;font-size:14px;line-height:1.35}
-.progress-line{width:100%;height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-bottom:20px}
-.progress-fill{height:100%;width:0%;background:#2563eb;transition:width .25s ease}
-#question{font-size:22px;margin:0 0 18px;line-height:1.35}
-.note{padding:10px 12px;border-radius:10px;background:#fffbeb;color:#92400e;border:1px solid #fde68a;margin-bottom:14px;font-size:14px}
-.answers{display:grid;gap:10px}
-.answer{width:100%;text-align:left;border:1px solid #d1d5db;background:#f9fafb;padding:14px 15px;border-radius:12px;font-size:16px;line-height:1.35;cursor:pointer;transition:.15s;color:#111827}
-.answer:hover{background:#eff6ff;border-color:#60a5fa}
-.answer.selected{background:#dbeafe;border-color:#2563eb}
-.answer.correct{background:#d1fae5;border-color:#10b981}
-.answer.wrong{background:#fee2e2;border-color:#ef4444}
-.actions{display:flex;justify-content:space-between;gap:12px;margin-top:20px;flex-wrap:wrap}
-button.main,button.secondary,button.danger{border-radius:12px;padding:13px 18px;font-size:16px;cursor:pointer;min-height:48px}
-button.main{border:none;background:#2563eb;color:white} button.main:hover{background:#1d4ed8}
-button.secondary{border:1px solid #d1d5db;background:white;color:#374151}
-button.danger{border:1px solid #fecaca;background:#fff1f2;color:#be123c}
-.hidden{display:none}
-.result{text-align:center} .result h2{font-size:30px;margin-bottom:10px}
-.score-big{font-size:42px;font-weight:bold;color:#2563eb;margin:12px 0}
-.result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}
-.result-card{border:1px solid #e5e7eb;border-radius:14px;padding:14px;background:#f9fafb}
-.result-card strong{display:block;font-size:22px;margin-bottom:4px} .result-card span{color:#6b7280;font-size:14px}
-.skipped{margin-top:20px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:14px;text-align:left;font-size:14px;color:#4b5563}
-.review-list{margin-top:18px;text-align:left;max-height:340px;overflow:auto;border:1px solid #e5e7eb;border-radius:14px;padding:12px;background:#fafafa}
-.review-item{padding:10px 0;border-bottom:1px solid #e5e7eb;font-size:14px} .review-item:last-child{border-bottom:none}
-.ok{color:#047857;font-weight:bold} .bad{color:#b91c1c;font-weight:bold} .miss{color:#92400e;font-weight:bold}
-@media(max-width:650px){
-.app{padding:10px;align-items:stretch} .card{border-radius:14px;padding:18px;min-height:calc(100vh - 20px)} .header{flex-direction:column}
-h1{font-size:22px} #question{font-size:19px} .answer{font-size:15px;padding:13px} .actions{flex-direction:column-reverse}
-button.main,button.secondary,button.danger{width:100%} .menu-grid{grid-template-columns:1fr}.mixed-row input{width:100%} .result-grid{grid-template-columns:1fr 1fr} .score-big{font-size:34px}
-}
+  body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;color:#222;margin:0;padding:20px;}
+  .container{max-width:1320px;margin:auto;}
+  h1{margin:0 0 8px;font-size:34px;}
+  .subtitle{color:#555;margin-bottom:16px;}
+  .card{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin-bottom:18px;}
+  .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+  label{display:block;font-size:13px;color:#555;margin-bottom:6px;}
+  input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #cfcfcf;border-radius:8px;font-size:14px;outline:none;}
+  input:focus{border-color:#7aa7ff;}
+  .summary{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;align-items:center;}
+  .box{padding:10px 14px;background:#f0f3f9;border-radius:8px;}
+  button{padding:10px 14px;border:1px solid #ccc;background:#fff;border-radius:8px;cursor:pointer;font-weight:700;}
+  button:hover{background:#f2f2f2;}
+  table{width:100%;border-collapse:collapse;background:#fff;}
+  th,td{border:1px solid #ccc;padding:8px;font-size:13px;}
+  th{background:#eef2f7;}
+  td.num{text-align:right;}
+  td.center{text-align:center;}
+  td input{width:110px;}
+  .readonly{background:#f4f4f4;color:#555;}
+  .red{border-color:red !important;background:#fff1f1 !important;}
+  .note{font-size:12px;color:#666;margin-top:10px;line-height:1.35;}
+  .warn{color:#b00020;font-weight:700;}
+  .annual{background:#fafafa;font-weight:700;}
 </style>
 </head>
+
 <body>
-<div class="app"><div class="card">
-  <div id="menuBox">
-    <div class="header"><div><h1>Teste Certiport Networking 1–246</h1><p class="small">Alege secțiunea sau introdu numărul de întrebări pentru testul amestecat. La final primești răspunsuri corecte, greșite, fără răspuns și procentaj ca la test.</p></div><div class="badge">Meniu teste</div></div>
-    <div class="menu-grid" id="menuGrid"></div>
+<div class="container">
+  <h1>Raport cu privire la frecvența elevilor</h1>
+  <div class="subtitle">
+    Introduceți separat săptămânile pentru semestrul I și semestrul II. Rândul anual se calculează automat.
   </div>
 
-  <div id="quizBox" class="hidden">
-    <div class="header"><div><h1 id="testTitle"></h1><p class="small">Poți rezolva tot testul sau poți apăsa „Termină și vezi rezultatele”. Întrebările nerezolvate se calculează ca greșite.</p></div><div class="badge" id="progressText"></div></div>
-    <div class="progress-line"><div class="progress-fill" id="progressFill"></div></div>
-    <p class="note" id="multiNote"></p>
-    <h2 id="question"></h2>
-    <div class="answers" id="answers"></div>
-    <div class="actions">
-      <button class="secondary" onclick="backToMenu()">Înapoi la teste</button>
-      <button class="secondary" onclick="prevQuestion()" id="prevBtn">Întrebarea precedentă</button>
-      <button class="secondary" onclick="goNextQuestion()" id="skipBtn">Întrebarea următoare</button>
-      <button class="danger" onclick="finishNow()">Termină și vezi rezultatele</button>
-      <button class="main" onclick="checkOrNext()" id="nextBtn">Verifică</button>
+  <div class="card">
+    <div class="grid">
+      <div>
+        <label>Clasa</label>
+        <input id="clasa" value="12B" />
+      </div>
+      <div>
+        <label>Nr. elevi</label>
+        <input id="nrElevi" type="number" min="0" step="1" value="33" />
+      </div>
+      <div>
+        <label>Ore / săptămână sem. I</label>
+        <input id="oreSapt1" type="number" min="0" step="1" value="27" />
+      </div>
+      <div>
+        <label>Nr. săptămâni sem. I</label>
+        <input id="nrSapt1" type="number" min="0" step="1" value="18" />
+      </div>
+      <div>
+        <label>Ore / săptămână sem. II</label>
+        <input id="oreSapt2" type="number" min="0" step="1" value="27" />
+      </div>
+      <div>
+        <label>Nr. săptămâni sem. II</label>
+        <input id="nrSapt2" type="number" min="0" step="1" value="16" />
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:12px;grid-template-columns:repeat(6,1fr);">
+      <div>
+        <label>Ore suplimentare sem. I</label>
+        <input id="oreSupl1" type="number" min="0" step="1" value="0" />
+      </div>
+      <div>
+        <label>Ore suplimentare sem. II</label>
+        <input id="oreSupl2" type="number" min="0" step="1" value="0" />
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="box">Ore/elev sem. I: <b id="perElev1">0</b></div>
+      <div class="box">Ore/elev sem. II: <b id="perElev2">0</b></div>
+      <div class="box">Ore/elev anual: <b id="perElevAnual">0</b></div>
+      <div class="box">Total clasă anual: <b id="totalAnual">0</b></div>
+      <div class="box">Formula: <b id="formula">—</b></div>
+
+      <button id="btnExcel">Export Excel</button>
+      <button id="btnWord">Export Word</button>
+      <button id="btnReset">Reset</button>
+    </div>
+
+    <div class="note">
+      Formula semestrială: <b>ore/săptămână × nr. săptămâni + ore suplimentare</b>.<br>
+      Anual: <b>semestrul I + semestrul II</b>. Procentele se afișează cu <b>2 cifre după virgulă</b>, iar la categoriile de absențe se ajustează ca suma să fie <b>100.00%</b>, dacă totalul pe categorii corespunde cu „Ore lipsă”.
     </div>
   </div>
 
-  <div id="resultBox" class="result hidden">
-    <h2>Rezultat final</h2>
-    <div class="score-big" id="percentText">0%</div>
-    <div class="result-grid">
-      <div class="result-card"><strong id="correctText">0</strong><span>corecte</span></div>
-      <div class="result-card"><strong id="wrongText">0</strong><span>greșite</span></div>
-      <div class="result-card"><strong id="unansweredText">0</strong><span>fără răspuns</span></div>
-      <div class="result-card"><strong id="totalText">0</strong><span>total</span></div>
-    </div>
-    <p id="messageText"></p>
-    <div class="skipped" id="skippedInfo"></div>
-    <div class="review-list" id="reviewList"></div>
-    <div class="actions">
-      <button class="secondary" onclick="backToMenu()">Înapoi la lista de teste</button>
-      <button class="main" onclick="restartCurrentTest()">Reia acest test</button>
+  <div class="card">
+    <table id="tabel">
+      <thead>
+        <tr>
+          <th>Semestrul</th>
+          <th>Nr. elevi</th>
+          <th>Nr. ore ce trebuiau frecventate</th>
+          <th>Ore lipsă (total)</th>
+          <th>Frecvența %</th>
+          <th>Ore lipsă / elev</th>
+          <th>Boală</th><th>%</th>
+          <th>Motivate</th><th>%</th>
+          <th>Nemotivate</th><th>%</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+
+    <div class="note" id="validareText">
+      Validare: <b>boală + motivate + nemotivate</b> trebuie să fie egal cu <b>ore lipsă total</b>.
     </div>
   </div>
-</div></div>
+</div>
 
 <script>
-const tests = {"set1": {"title": "Test 1: Întrebări 1–54", "range": "1–54", "skipped": [], "questions": [{"nr": 1, "q": "Networking Fundamentals 1.1 includes which topics? Choose two.", "a": ["Internet, intranet, extranet and client-server concepts", "Only graphic design and video editing", "Transmission types such as unicast, multicast and broadcast", "Only Microsoft Word formatting"], "c": [0, 2]}, {"nr": 2, "q": "Connecting to a private network address from a public network requires:", "a": ["Network address translation (NAT)", "Dynamic Host Configuration Protocol (DHCP)", "Network Access Protection (NAP)", "Dynamic domain name system (DDNS)"], "c": [0]}, {"nr": 3, "q": "A Media Access Control (MAC) address identifies a/an:", "a": ["UPnP device", "Local broadcast domain", "Network interface card (NIC)", "Local area network (LAN)"], "c": [2]}, {"nr": 4, "q": "Two companies want to share data by using the Internet. Which type of network provides the solution?", "a": ["Ethernet", "Intranet", "Extranet", "Perimeter"], "c": [2]}, {"nr": 5, "q": "Which technology can you use to extend an internal network across shared or public networks?", "a": ["VLAN", "Microsoft ASP.NET", "Microsoft .NET Framework", "VPN"], "c": [3]}, {"nr": 6, "q": "One purpose of a perimeter network is to:", "a": ["Make resources available to the intranet", "Link campus area networks (CANs)", "Link local area networks (LANs)", "Make resources available to the Internet"], "c": [3]}, {"nr": 7, "q": "A private network that allows members of an organization to exchange data is an:", "a": ["Extranet", "Ethernet", "Intranet", "Internet"], "c": [2]}, {"nr": 8, "q": "Match each network type to its corresponding definition. Which variant is correct?", "a": ["Extranet – only users within an organization; Intranet – system of interconnected networks; Internet – controlled access", "Extranet – controlled access for business/educational purposes; Intranet – access only within an organization; Internet – system of interconnected networks", "Extranet – local network only; Intranet – public network; Internet – private tunnel", "Extranet – wireless network; Intranet – cable network; Internet – firewall zone"], "c": [1]}, {"nr": 9, "q": "What technology takes data, breaks it into packets, and sends it over a network, sometimes using different routes for each packet?", "a": ["Circuit switching", "Connection switching", "Packet switching", "Network switching"], "c": [2]}, {"nr": 10, "q": "What name does Windows Server 2008 R2 use for terminal service?", "a": ["MS telnet server", "MS primary services", "MS thin server", "Remote Desktop Service"], "c": [3]}, {"nr": 11, "q": "What would you use to create VPN tunnels so users can connect to your internal network while at home using Windows Server 2008 R2?", "a": ["Microsoft RAS", "Microsoft RRAS", "Microsoft RDC", "Microsoft VPN Server"], "c": [1]}, {"nr": 12, "q": "VPNs are implemented to provide:", "a": ["A secure connection within a private network", "A secure connection through public networks", "Additional encryption by using IPSec", "Additional security for selected computers"], "c": [1]}, {"nr": 13, "q": "A VPN is a/an:", "a": ["Encrypted connection across the Internet", "Virtual network within your LAN", "Communication tunnel between VLANs", "Personal network for your use only"], "c": [0]}, {"nr": 14, "q": "“A/an virtual private network (VPN)” protects a network's perimeter by monitoring traffic as it enters and leaves. What is correct instead?", "a": ["Extranet", "Firewall", "Intranet", "No change is needed"], "c": [1]}, {"nr": 15, "q": "Match the VPN connection type to the corresponding definition. Which variant is correct?", "a": ["SSL VPN – remote user from Internet; Site-to-Site VPN – connects two private networks; L2TP – creates an unencrypted connection", "SSL VPN – connects only switches; Site-to-Site VPN – only one computer; L2TP – email protocol", "SSL VPN – wireless standard; Site-to-Site VPN – printer protocol; L2TP – firewall", "SSL VPN – local cable; Site-to-Site VPN – DNS service; L2TP – router table"], "c": [0]}, {"nr": 16, "q": "What port does Remote Desktop Services use?", "a": ["443", "501", "389", "3389"], "c": [3]}, {"nr": 17, "q": "You use the ____________ to connect to a terminal server.", "a": ["Remote Desktop Connection (RDC)", "Remote Desktop Protocol (RDP)", "Remote Session Call (RSC)", "Remote NetBIOS Connection (RNC)"], "c": [1]}, {"nr": 18, "q": "What allows a user to connect to a corporate network using the Internet?", "a": ["VPN", "VPC", "PPTN", "IPSec"], "c": [0]}, {"nr": 19, "q": "What command do you use to connect to a remote computer so that you can execute commands?", "a": ["ftp", "nslookup", "telnet", "nbstatat"], "c": [2]}, {"nr": 20, "q": "A network that separates an organization's private network from a public network is a/an:", "a": ["Firewall", "Extranet", "Perimeter", "Internet"], "c": [2]}, {"nr": 21, "q": "In local area network (LAN) topologies, the primary media access methods are: Choose two.", "a": ["Contention", "Negotiation", "Kerberos", "Token passing"], "c": [0, 3]}, {"nr": 22, "q": "In a physical star topology, the central device is referred to as a:", "a": ["Bridge", "Server", "Segmenter", "Hub"], "c": [3]}, {"nr": 23, "q": "The topology of a local area network (LAN) is defined by the:", "a": ["Number of devices to connect", "Physical and logical characteristics", "Distance between workstations", "Type of cable being used"], "c": [1]}, {"nr": 24, "q": "A node within a local area network (LAN) must have a network interface device and a:", "a": ["Network account", "Table of all network nodes", "Host address", "Resource to share"], "c": [2]}, {"nr": 25, "q": "Which type of port is used to support VLAN traffic between two switches?", "a": ["Virtual port", "WAN port", "Trunk port", "LAN port"], "c": [2]}, {"nr": 26, "q": "One reason to incorporate VLANs in a network is to:", "a": ["Increase the number of available IP addresses", "Increase the number of available MAC addresses", "Reduce the number of broadcast domains", "Reduce the number of nodes in a broadcast domain"], "c": [3]}, {"nr": 27, "q": "Match the networking topologies to their characteristics. Which variant is correct?", "a": ["Star – central device; Ring – each node connects to two nodes; Mesh – each computer connects to every other computer", "Star – every computer to every computer; Ring – central hub; Mesh – one cable only", "Star – no central device; Ring – no repeaters; Mesh – no redundancy", "Star – wireless only; Ring – Internet only; Mesh – VPN only"], "c": [0]}, {"nr": 28, "q": "What are three advantages of VLANs? Choose three.", "a": ["They can logically address packets by using IP", "They require a router to connect to VLANs on another switch", "They compartmentalize a network and isolate traffic", "A single switch can implement only a single VLAN", "They act as though they are on the same LAN regardless of physical location"], "c": [0, 2, 4]}, {"nr": 29, "q": "To set lower security settings in Internet Explorer for an extranet site, add the site's URL to the “Local Intranet” zone. What is correct instead?", "a": ["Internet", "Trusted Sites", "Extranet Sites", "No change is needed"], "c": [1]}, {"nr": 30, "q": "IPSec policies for two machines on a LAN can be modified by using the “IPSec policy snap-in” on Windows 7. What is correct instead?", "a": ["Windows Firewall with Advanced Security snap-in", "LAN adapter properties", "Remote Access snap-in", "No change is needed"], "c": [0]}, {"nr": 31, "q": "You need to divide a network into three subnets. Which device should you use?", "a": ["Hub", "Bridge", "Router", "Segmenter"], "c": [2]}, {"nr": 32, "q": "You work at a coffee shop and need to set up a perimeter network. Which two items should you include in the perimeter network? Choose two.", "a": ["Network printer", "Web server", "File server", "Wi‑Fi network", "Point of sale terminals"], "c": [1, 3]}, {"nr": 33, "q": "A node within a local area network (LAN) must have which two of the following? Choose two.", "a": ["Username and password", "Share name", "NIC", "IP address", "Table of all network nodes"], "c": [2, 3]}, {"nr": 34, "q": "What are two advantages of using star topology rather than ring topology in a computer lab workgroup? Choose two.", "a": ["Failure of a central device does not bring down the entire network", "A central connection point allows flexibility and scalability", "Data travels on redundant paths", "A cable problem within the group affects two nodes, at most"], "c": [1, 3]}, {"nr": 35, "q": "What are three characteristics of Ethernet network topology? Choose three.", "a": ["It uses tokens to avoid collisions", "It can use coaxial, twisted pair, and fiber optic media", "It comprises the largest share of networks in place today", "It is a non-switching protocol", "It can negotiate different transmission speeds"], "c": [1, 2, 4]}, {"nr": 36, "q": "What are two characteristics of the CSMA/CD access method? Choose two.", "a": ["It checks to see if a collision has been detected", "It does a round robin search for requests", "It signals its intent to transmit", "It waits until the transmission medium is idle"], "c": [0, 3]}, {"nr": 37, "q": "Wireless Network Properties. Which variant correctly completes the statements?", "a": ["To manually select the network, uncheck “connect to a more preferred network if available”; 802.1X requires certificates for encryption", "To manually select the network, enable automatic connection; WEP requires certificates", "To manually select the network, disable the wireless adapter; WPA-PSK requires certificates", "No change is needed for either statement"], "c": [0]}, {"nr": 38, "q": "Perimeter network statements. Which variant is correct?", "a": ["Internal clients access external resources – True; LAN has no access to perimeter – True; Perimeter has Internet servers – False", "Internal clients access external resources – False; LAN has no access to perimeter – False; Perimeter has Internet servers – True", "All three statements are True", "All three statements are False"], "c": [1]}, {"nr": 39, "q": "Security zones: https://sales.northwindtrades.com should be placed in which zone, and https://hr.contoso.com in which zone?", "a": ["Internet; Internet", "Trusted Sites; Local Intranet", "Restricted Sites; Internet", "Local Intranet; Restricted Sites"], "c": [1]}, {"nr": 40, "q": "What device acts as a high-speed modem for LAN?", "a": ["Analog modem", "Telco incoming router", "Packet switcher", "CSU/DSU"], "c": [3]}, {"nr": 41, "q": "Which type of network is most vulnerable to intrusion?", "a": ["Dial-up", "Wireless", "Broadband", "Leased line"], "c": [1]}, {"nr": 42, "q": "Which type of network covers the broadest area?", "a": ["WAN", "CAN", "LAN", "PAN"], "c": [0]}, {"nr": 43, "q": "Which of the following is a Layer 2 WAN protocol?", "a": ["Point-to-Point Protocol (PPP)", "Simple Network Management Protocol (SNMP)", "Transmission Control Protocol (TCP)", "Internet Protocol (IP)"], "c": [0]}, {"nr": 44, "q": "Which two of the following are connectivity options for wide area networks (WANs)? Choose two.", "a": ["Token ring", "Ethernet", "Dial-up", "Leased line"], "c": [2, 3]}, {"nr": 45, "q": "What is the bit rate for a North American T3 circuit?", "a": ["6.312 Mbit/s", "44.736 Mbit/s", "274.176 Mbit/s", "400.352 Mbit/s"], "c": [1]}, {"nr": 46, "q": "A university has network links between various locations. Where would a T3 connection be appropriate?", "a": ["Server to network in the main campus server room", "Main campus to a large satellite campus", "Computer lab PC to lab printer", "Library laptop PC to Internet"], "c": [1]}, {"nr": 47, "q": "Which two features of a Windows Server 2008 R2 server should you install to use that server as a software router? Choose two.", "a": ["Network Policy and Access Services", "Routing and Remote Access Services", "Remote Administration", "DirectAccess"], "c": [0, 1]}, {"nr": 48, "q": "In a network diagram, where is a T3 connection most appropriate?", "a": ["Between two computers in the same lab", "Between a local PC and a printer", "Between a WAN/telecom link and the organization network/perimeter router", "Between a keyboard and a workstation"], "c": [2]}, {"nr": 49, "q": "What is the primary disadvantage of X.25?", "a": ["Digital circuit", "Small data payloads", "Circuit switching", "Slow speeds"], "c": [3]}, {"nr": 50, "q": "The _____________ is the largest WAN in the world.", "a": ["Internet", "Intranet", "WWW", "MSDN"], "c": [0]}, {"nr": 51, "q": "What stage is the World Wide Web in?", "a": ["1.0", "1.1", "2.0", "3.0"], "c": [2]}, {"nr": 52, "q": "When you have multiple circuits connected to a site, the entire circuit is known as a:", "a": ["Virtual circuit", "Emulated circuit", "Joined circuit", "Multitasked circuit"], "c": [0]}, {"nr": 53, "q": "What replaced X.25?", "a": ["Frame relay", "ATM", "ISDN BRI", "DSL"], "c": [0]}, {"nr": 54, "q": "At what speed does a T3 line run?", "a": ["1.5 Mbps", "4.5 Mbps", "44.7 Mbps", "128 Mbps"], "c": [2]}]}, "set2": {"title": "Test 2: Întrebări 55–104", "range": "55–104", "skipped": [], "questions": [{"nr": 55, "q": "In Europe, what circuit would be similar to the T1 found in the United States?", "a": ["E1", "J1", "T2", "F1"], "c": [0]}, {"nr": 56, "q": "How many B channels does an ISDN PRI support?", "a": ["2", "8", "23", "48"], "c": [2]}, {"nr": 57, "q": "What technology uses wires from the telephone company to provide broadband Internet connection?", "a": ["Cable", "DSL", "FDDI", "Frame relay"], "c": [1]}, {"nr": 58, "q": "A __________ is the guaranteed certain amount of information provided by a circuit or line.", "a": ["Committed information route", "Pivotal information route", "Next hop policy route", "Frame x frame route"], "c": [0]}, {"nr": 59, "q": "What speed does a T1 run at?", "a": ["1.544 Mbps", "2.889 Mbps", "3.101 Gbps", "2.54 Mbps"], "c": [0]}, {"nr": 60, "q": "How fast is a DS0 circuit?", "a": ["32 Kbps", "64 Kbps", "128 Kbps", "1024 Kbps"], "c": [1]}, {"nr": 61, "q": "X.25 and frame relay are examples of what type of WAN technology?", "a": ["Circuit switching", "Connection switching", "Packet switching", "Network switching"], "c": [2]}, {"nr": 62, "q": "What part of the network is the point where the administrator's responsibility ends and the telecommunications provider's responsibility begins?", "a": ["Last mile", "Demarc", "Router array", "PAD interface"], "c": [1]}, {"nr": 63, "q": "What is the primary disadvantage of X.25?", "a": ["Digital circuit", "Small data payloads", "Circuit switching", "Slow speed"], "c": [3]}, {"nr": 64, "q": "If an 802.11g Internet connection has connectivity problems, what may be the cause?", "a": ["A cordless phone", "A cellular phone", "Incandescent lights", "Electromagnetic interference (EMI)"], "c": [3]}, {"nr": 65, "q": "Which factor has the biggest impact on data transmission speed in a wireless network?", "a": ["The access method used for the network", "The transmission standard of the equipment used", "The use of strong encryption", "The transmission wattage rating used on the NIC"], "c": [1]}, {"nr": 66, "q": "Which of the following uses a tunneling protocol?", "a": ["Internet", "VPN", "Extranet", "VLAN"], "c": [1]}, {"nr": 67, "q": "Which two are published IEEE 802.11 wireless transmission standards? Choose two.", "a": ["802.11f", "802.11g", "802.11k", "802.11m", "802.11n"], "c": [1, 4]}, {"nr": 68, "q": "What happens when an 802.11b node starts broadcasting within the range of an 802.11g access point?", "a": ["The access point will transmit, but the node will be unable to receive", "A connection will be established", "Both will be unable to transmit", "The node will transmit, but the access point will be unable to receive"], "c": [1]}, {"nr": 69, "q": "Which technology provides the highest bit rate?", "a": ["T1", "E1", "DS3", "ISDN"], "c": [2]}, {"nr": 70, "q": "Which wireless authentication method provides the highest level of security?", "a": ["Wired Equivalency Privacy (WEP)", "IEEE 802.11n", "Wi‑Fi Protected Access (WPA)", "IEEE 802.11a"], "c": [2]}, {"nr": 71, "q": "The maximum throughput of an 802.11g network is:", "a": ["2.4 GHz", "54 GHz", "2.4 Mbps", "54 Mbps"], "c": [3]}, {"nr": 72, "q": "Match each 802.11 standard to its characteristics. Which variant is correct?", "a": ["802.11a: 5 GHz / 54 Mbps; 802.11b: 2.4 GHz / 11 Mbps; 802.11g: 2.4 GHz / 54 Mbps; 802.11n: 2.4–5 GHz / 65–600 Mbps", "802.11a: 2.4 GHz / 11 Mbps; 802.11b: 5 GHz / 54 Mbps; 802.11g: 5 GHz / 600 Mbps; 802.11n: 2.4 GHz / 54 Mbps", "All standards use only 2.4 GHz", "All standards have the same speed"], "c": [0]}, {"nr": 73, "q": "Security is a concern on wireless networks due to:", "a": ["The radio broadcast access method", "Spread spectrum issues", "Frequency modulation issues", "The potential for cross-talk"], "c": [0]}, {"nr": 74, "q": "The IEEE standards 802.11a, b, g, and n are collectively known as what?", "a": ["WiMAX", "Bluetooth", "WiFi", "Mobile ad hoc networks"], "c": [2]}, {"nr": 75, "q": "Which IEEE 802.11 Wi‑Fi standard requires dual antennas so it can run in all supported frequencies?", "a": ["802.11a", "802.11b", "802.11g", "802.11n"], "c": [3]}, {"nr": 76, "q": "“WEP” wireless encryption is the most susceptible to interception and decryption. What is the correct answer?", "a": ["WPA-AES", "WPA2", "WPA-PSK", "No change is needed"], "c": [3]}, {"nr": 77, "q": "Which wireless communication problem is caused by electromagnetic waves?", "a": ["Fading", "Attenuation", "Interference", "Diffraction"], "c": [2]}, {"nr": 78, "q": "The four IEEE standards 802.11a, b, g, and n are collectively known as mobile ad hoc networks. What is correct instead?", "a": ["WiMAX", "Bluetooth", "WiFi", "No change is needed"], "c": [2]}, {"nr": 79, "q": "In a wireless network that requires an SSL certificate, WEP handles the SSL certificate. What is correct instead?", "a": ["802.1X", "WPA2-PSK", "WPA-PSK", "No change is needed"], "c": [0]}, {"nr": 80, "q": "Wireless bridge statements. Which variant is correct?", "a": ["Connects Ethernet devices – True; increases AP signal strength – False; always work in pairs – True", "All statements are True", "Connects Ethernet devices – False; increases AP signal – True; always work in pairs – False", "All statements are False"], "c": [0]}, {"nr": 81, "q": "Which of the following is not a characteristic of 802.11n?", "a": ["Frame aggregation", "Channel bonding", "RFI protection", "MIMO"], "c": [2]}, {"nr": 82, "q": "Which of the following determines the media access method used in a network?", "a": ["Number of hosts connected", "Number of domain servers", "Maximum speed of the media", "Topology and protocols"], "c": [3]}, {"nr": 83, "q": "In which physical network topology is each computer connected to a central point?", "a": ["Star", "Mesh", "Ring", "Bus"], "c": [0]}, {"nr": 84, "q": "A characteristic of the mesh topology is that it:", "a": ["Uses a central hub", "Cannot use wired connections", "Uses redundant paths", "Cannot use wireless connections"], "c": [2]}, {"nr": 85, "q": "What are two characteristics of a mesh network topology? Choose two.", "a": ["It is fault tolerant because of redundant connections", "Every node connects to every other node", "It works best for a large number of nodes", "It requires less cabling than star or ring"], "c": [0, 1]}, {"nr": 86, "q": "What speed does FDDI use?", "a": ["10 Mbps", "44 Mbps", "54 Mbps", "100 Mbps"], "c": [3]}, {"nr": 87, "q": "What topology does FDDI use?", "a": ["Bus", "Star", "Ring", "Mesh"], "c": [2]}, {"nr": 88, "q": "A network device that associates a MAC address with a port is a:", "a": ["DSL modem", "Hub", "Router", "Switch"], "c": [3]}, {"nr": 89, "q": "A Layer 2 device that connects multiple computers within a network is a:", "a": ["Repeater", "Switch", "Router", "Packet"], "c": [1]}, {"nr": 90, "q": "In addition to switching, multilayer switches also:", "a": ["Provide Layer 3 routing functions", "Interface only with CAT3", "Support only 10 MB LAN ports", "Operate only by Layer 1 and 2 protocols"], "c": [0]}, {"nr": 91, "q": "One reason to replace an unmanaged switch with a managed switch is to:", "a": ["Manage routing tables", "Support multiple VLANs", "Reduce collision domains", "Route between networks"], "c": [1]}, {"nr": 92, "q": "What is an example of a network device that associates a network address with a port?", "a": ["Switch", "Router", "Hub", "DSL modem"], "c": [1]}, {"nr": 93, "q": "What is a similarity between Layer 2 and Layer 3 switches?", "a": ["Both provide a high level of security", "Both use logical addressing", "Both forward packets onto the network", "Both allow the implementation of VLANs"], "c": [2]}, {"nr": 94, "q": "Which network device interconnects computers in a workgroup, can be remotely configured, and provides the best throughput?", "a": ["Unmanaged switch", "Hub", "Router", "Managed switch"], "c": [3]}, {"nr": 95, "q": "What are two differences between switches and hubs? Choose two.", "a": ["Switches are slower than hubs", "Switches send data to all computers for efficiency", "Switches can send and receive data at the same time", "Switches identify the intended destination of received data"], "c": [2, 3]}, {"nr": 96, "q": "Switch statements. Which variant is correct?", "a": ["Unicast to one destination port – True; floods unknown destination – True; broadcasts only to uplink – False", "All statements are True", "Unicast to all ports – True; floods unknown destination – False; broadcasts only to uplink – True", "All statements are False"], "c": [0]}, {"nr": 97, "q": "One advantage of dynamic routing is that it:", "a": ["Automatically maintains routing tables", "Limits traffic derived from routing protocols", "Reduces broadcast traffic", "Automatically enables DHCP"], "c": [0]}, {"nr": 98, "q": "A router's static route is set by the:", "a": ["Adjacent network", "Next upstream router", "Network administrator", "Routing protocol"], "c": [2]}, {"nr": 99, "q": "The query protocol used to locate resources on a network is:", "a": ["UDP", "LDAP", "Tracert", "Telnet"], "c": [1]}, {"nr": 100, "q": "The function of a router is to:", "a": ["Provide IP subnet masks for hosts", "Forward traffic to other networks", "Broadcast routing tables to clients", "Store tables for name resolution"], "c": [1]}, {"nr": 101, "q": "If a router cannot determine the next hop for a packet, the router will:", "a": ["Forward the packet to the default route", "Send the packet back to the source", "Broadcast the packet", "Store the packet in memory"], "c": [0]}, {"nr": 102, "q": "If a router separates a DHCP server from its clients, the clients will:", "a": ["Immediately lose connectivity to all segments", "Be unable to obtain their leases from the server", "Immediately lose connectivity to the local segment", "Receive an immediate renewal"], "c": [1]}, {"nr": 103, "q": "Every router today is “TCP/IP” enabled, an industry-standard protocol used on the Internet and for local addressing. What is correct?", "a": ["HTTP", "FTP", "SNMP", "No change is needed"], "c": [3]}, {"nr": 104, "q": "“Dynamic routing” is fault tolerant. What is correct?", "a": ["Static routing", "Default route", "Least cost routing", "No change is needed"], "c": [3]}]}, "set3": {"title": "Test 3: Întrebări 105–156", "range": "105–156", "skipped": [], "questions": [{"nr": 105, "q": "What is an example of a Layer 3 device that connects multiple computers and networks?", "a": ["Packet", "Repeater", "Switch", "Router"], "c": [3]}, {"nr": 106, "q": "Which metric does Routing Information Protocol (RIP) use to determine the least costly route?", "a": ["Delay", "Host ID", "Hop count", "Interface"], "c": [2]}, {"nr": 107, "q": "Quality of Service (QoS) statements. Which variant is correct?", "a": ["Defines priority traffic – True; controls bandwidth – True; assigns protocols dynamically – False", "All statements are True", "Defines priority – False; controls bandwidth – False; assigns protocols dynamically – True", "All statements are False"], "c": [0]}, {"nr": 108, "q": "________ is a route that must be manually defined on each router.", "a": ["Static", "Dynamic", "Persistent", "Global"], "c": [0]}, {"nr": 109, "q": "What feature within Windows allows the server to act as a router?", "a": ["IPSec", "DHCP", "IP forwarding", "RDC"], "c": [2]}, {"nr": 110, "q": "_______________ uses a clocking circuit to control the timing of communications between two WAN devices such as routers.", "a": ["Static route", "Dynamic route", "PPTP route", "Point to point"], "c": [3]}, {"nr": 111, "q": "What routing protocol is the most popular distance-vector routing algorithm used to determine best routes within a network?", "a": ["RIP", "OSPF", "BGP", "IGMP"], "c": [0]}, {"nr": 112, "q": "What routing protocol is the most popular link-state protocol used within a large organization?", "a": ["RIP", "OSPF", "BGP", "IGMP"], "c": [1]}, {"nr": 113, "q": "When a packet traverses a network, each router is a ____________.", "a": ["Jump point", "CSU/DSU", "Jump switch", "Hop"], "c": [3]}, {"nr": 114, "q": "A cable that meets the 1000BaseT standard has a maximum length of:", "a": ["100 m", "250 m", "500 m", "1,000 m"], "c": [0]}, {"nr": 115, "q": "Attenuation in a wireless network signal is a result of:", "a": ["Number of wireless nodes connected", "Distance from the access point", "Interference from cellular phones", "Encryption of the signal"], "c": [1]}, {"nr": 116, "q": "What is the maximum cable length for a single Cat5 UTP cable run?", "a": ["285 feet / 86.87 meters", "328 feet / 99.97 meters", "432 feet / 131.67 meters", "600 feet / 182.88 meters"], "c": [1]}, {"nr": 117, "q": "Which cable type transmits data the greatest distance?", "a": ["Multi-mode fiber", "Single-mode fiber", "Cat5e", "Cat6"], "c": [1]}, {"nr": 118, "q": "To directly connect the Ethernet NICs of two computers, you should use a:", "a": ["Crossover cable", "Straight cable", "Rollover cable", "Coaxial cable"], "c": [0]}, {"nr": 119, "q": "What is the minimum cabling requirement for a 100BaseTX network?", "a": ["Category 3 UTP cable", "Category 5 UTP cable", "Category 6 UTP cable", "Multimode fiber cable"], "c": [1]}, {"nr": 120, "q": "Which feature of Category 5e STP cable reduces external interference?", "a": ["Crosstalk", "Shielding", "Length", "Twisting"], "c": [1]}, {"nr": 121, "q": "A home office cable needs to support at least 300 Mbps. What is the least expensive option that meets this requirement?", "a": ["Cat3", "Cat5", "Cat5e", "Cat6"], "c": [2]}, {"nr": 122, "q": "The type of connector used on a 100BaseT Ethernet cable is:", "a": ["RJ-11", "RJ-45", "TNC", "BNC"], "c": [1]}, {"nr": 123, "q": "What are two characteristics of fiber optic cable? Choose two.", "a": ["Conducts electricity", "Requires metal conduit", "Supports splicing", "Requires a polish for end connectors"], "c": [2, 3]}, {"nr": 124, "q": "You need to run Ethernet drops where interference exists. Which cable type should you use?", "a": ["STP Cat5e", "UTP Cat5e", "Cat3", "UTP Cat6"], "c": [0]}, {"nr": 125, "q": "Identify the network cable type and connector from the graphic. Which variant is correct?", "a": ["Connector type – RJ11; Cable type – Fiber", "Connector type – RJ45; Cable type – Cat3", "Connector type – BNC; Cable type – Coaxial", "Connector type – TNC; Cable type – Cat6"], "c": [1]}, {"nr": 126, "q": "When a signal degrades as it runs through a wire, you have:", "a": ["Degradation", "Attenuation", "Crossover", "Resistance"], "c": [1]}, {"nr": 127, "q": "What does X.25 use at its DTE device?", "a": ["Telco incoming router", "Packet switcher", "Analog modem", "PAD"], "c": [3]}, {"nr": 128, "q": "Which of the following represents a MAC address?", "a": ["GV:ZC:KK:DK:FZ:CA", "255.255.255.0", "05:35:AB:6E:A1:25", "127.0.0.1"], "c": [2]}, {"nr": 129, "q": "What is the correct order of the OSI model layers?", "a": ["Physical, Data Link, Network, Transport, Session, Presentation, Application", "Application, Presentation, Session, Transport, Network, Data Link, Physical", "Physical, Network, Data Link, Transport, Session, Presentation, Application", "Data Link, Physical, Network, Transport, Application, Session, Presentation"], "c": [0]}, {"nr": 130, "q": "In which OSI layer does routing occur?", "a": ["Transport", "Network", "Data Link", "Physical"], "c": [1]}, {"nr": 131, "q": "Which protocol is a transport layer protocol?", "a": ["FTP", "IP", "UDP", "ASCII"], "c": [2]}, {"nr": 132, "q": "Which protocol is responsible for automatically assigning IP addresses?", "a": ["HTTP", "DHCP", "DNS", "WINS"], "c": [1]}, {"nr": 133, "q": "At what layer in the OSI model are hardware addresses referenced?", "a": ["Network", "Application", "Data Link", "Physical"], "c": [2]}, {"nr": 134, "q": "According to the OSI model, encryption takes place on the transport layer. What is correct instead?", "a": ["Presentation", "Network", "Application", "No change is needed"], "c": [0]}, {"nr": 135, "q": "Match each protocol to its description. Which variant is correct?", "a": ["UDP – connectionless/best-effort; TCP – connection-oriented/guaranteed; ARP – resolves IP to MAC", "UDP – guaranteed; TCP – resolves IP to MAC; ARP – connectionless", "UDP – email; TCP – DNS; ARP – web", "All are application protocols"], "c": [0]}, {"nr": 136, "q": "Match the OSI layer to its description. Which variant is correct?", "a": ["Application provides services to user apps; Session controls dialogue; Network handles path determination; Data Link checks frames/CRC", "Physical provides email; Session routes packets; Network checks CRC; Data Link encrypts text", "Application is cabling; Presentation is routing; Transport is DNS; Network is keyboard input", "All descriptions belong to Physical layer"], "c": [0]}, {"nr": 137, "q": "OSI statements. Which variant is correct?", "a": ["HTTP/TELNET/FTP/SMTP operate on Layer 7 – True; Layer 4 controls dialogue – False; Layer 3 controls routing – True", "All statements are True", "All statements are False", "Layer 4 controls dialogue – True; Layer 3 controls routing – False"], "c": [0]}, {"nr": 138, "q": "Which layer in the OSI model covers routing between networks?", "a": ["Physical", "Data Link", "Network", "Transport"], "c": [2]}, {"nr": 139, "q": "_____________ is used to send packets from one network to another network.", "a": ["Routing", "Transport", "BGP", "Encapsulation"], "c": [0]}, {"nr": 140, "q": "The protocol that maps IP addresses to MAC addresses is:", "a": ["IMAP", "DHCP", "RIP", "UDP", "ARP"], "c": [4]}, {"nr": 141, "q": "Which of these is an application layer protocol?", "a": ["TCP", "FTP", "IP", "UDP"], "c": [1]}, {"nr": 142, "q": "After enabling Windows Firewall, you can no longer access websites. Which two TCP ports should you add exceptions for? Choose two.", "a": ["Port 21", "Port 23", "Port 25", "Port 80", "Port 443"], "c": [3, 4]}, {"nr": 143, "q": "TCP/IP model statements. Which variant is correct?", "a": ["TCP/IP has four layers corresponding with OSI seven layers – False; TCP/IP application layer corresponds with top four OSI layers – False; TCP/IP transport and Internet layers correspond with OSI layers 3 and 4 – True", "All statements are True", "All statements are False", "Only the first statement is True"], "c": [0]}, {"nr": 144, "q": "Match the TCP port to the corresponding service. Which variant is correct?", "a": ["SMTP – 25; FTP – 21; HTTPS – 443", "SMTP – 80; FTP – 443; HTTPS – 21", "SMTP – 23; FTP – 25; HTTPS – 80", "All use port 53"], "c": [0]}, {"nr": 145, "q": "What command do you use to connect to an FTP server to download a file?", "a": ["nslookup", "ssh", "telnet", "ftp"], "c": [3]}, {"nr": 146, "q": "The default subnet mask for a Class B network is:", "a": ["0.0.0.255", "0.0.255.255", "255.0.0.0", "255.255.0.0"], "c": [3]}, {"nr": 147, "q": "Which network does the IP address 220.100.100.100 belong to?", "a": ["220.100.100.0/24", "220.100.100.1/24", "255.255.255.0/24", "255.255.255.1/24"], "c": [0]}, {"nr": 148, "q": "Which subnet mask is valid?", "a": ["255.255.255.240", "255.255.255.228", "255.255.255.164", "255.255.255.245"], "c": [0]}, {"nr": 149, "q": "What is the default subnet mask for a Class C Internet network?", "a": ["255.255.255.252", "255.255.255.240", "255.255.255.192", "255.255.255.0"], "c": [3]}, {"nr": 150, "q": "Ping result: the server does not return ping requests. Which variant is correct?", "a": ["The server returned all ping requests; server is up", "The server did not return ping requests; server status is down", "DNS resolved incorrectly; server status is unknown", "The firewall is disabled; server status is up"], "c": [1]}, {"nr": 151, "q": "Which of the following is a public IP address?", "a": ["10.156.89.1", "68.24.78.221", "172.16.152.48", "192.168.25.101"], "c": [1]}, {"nr": 152, "q": "To which IP configuration does the CIDR notation 192.168.1.1/25 refer?", "a": ["192.168.1.1 255.255.255.64", "192.168.1.1 255.255.255.1", "192.168.1.1 255.255.255.32", "192.168.1.1 255.255.255.256", "192.168.1.1 255.255.255.128"], "c": [4]}, {"nr": 153, "q": "The default gateway address identifies the:", "a": ["Device that will connect the computer to the local network", "Device that will connect the computer to a remote network", "Server that will provide name services", "Server that will authenticate the user"], "c": [1]}, {"nr": 154, "q": "IPv4 multicast addresses range from 192.168.0.0 to 192.168.255.255. What is correct instead?", "a": ["127.0.0.0 to 127.255.255.255", "172.16.0.0 to 172.31.255.255", "224.0.0.0 to 239.255.255.255", "No change is needed"], "c": [2]}, {"nr": 155, "q": "The loopback address of your computer is 127.0.0.1. What is correct?", "a": ["10.0.1.1", "169.254.0.5", "192.168.1.1", "No change is needed"], "c": [3]}, {"nr": 156, "q": "Which of these is a public address space?", "a": ["192.168.0.0/16", "197.16.0.0/12", "10.0.0.0/8", "172.16.0.0/12"], "c": [1]}]}, "set4": {"title": "Test 4: Întrebări 157–200", "range": "157–200", "skipped": [], "questions": [{"nr": 157, "q": "IPv4 address statements. Which variant is correct?", "a": ["IPv4 has 64 bits – True; octets are 8-bit fields – True; octet values are 0–256 – True", "IPv4 has 64 bits – False; octets are 8-bit fields – True; octet values are 0–256 – False", "IPv4 has 32 bits – False; octets are 16-bit fields – True; octet values are 0–256 – True", "All statements are False"], "c": [1]}, {"nr": 158, "q": "IPv4 multicast addresses range from 192.168.0.0 to 192.168.255.255. What is correct instead?", "a": ["127.0.0.0 to 127.255.255.255", "172.16.0.0 to 172.31.255.255", "224.0.0.0 to 239.255.255.255", "No change is needed"], "c": [2]}, {"nr": 159, "q": "Each IPv4 address consists of a MAC address and data-link layer address. What is correct instead?", "a": ["Network ID and a host ID", "DNS record and a default route", "64-bit binary number divided into octets", "No change is needed"], "c": [0]}, {"nr": 160, "q": "Match each IP address to its IPv4 address class. Which variant is correct?", "a": ["Class A – 64.123.12.1; Class B – 133.234.23.2; Class C – 201.111.22.3; Class D – 224.100.20.3", "Class A – 224.100.20.3; Class B – 201.111.22.3; Class C – 133.234.23.2; Class D – 64.123.12.1", "Class A – 133.234.23.2; Class B – 64.123.12.1; Class C – 224.100.20.3; Class D – 201.111.22.3", "All four addresses are Class C"], "c": [0]}, {"nr": 161, "q": "Match IPv4 address types to definitions. Which variant is correct?", "a": ["Multicast – one-to-many; Broadcast – everyone on a subnet; Unicast – one-to-one", "Multicast – one-to-one; Broadcast – one-to-many; Unicast – everyone on subnet", "Multicast – private network only; Broadcast – router only; Unicast – DNS only", "All are the same type of communication"], "c": [0]}, {"nr": 162, "q": "Dynamic routing statements. Which variant is correct?", "a": ["Learns networks automatically – True; removes routes automatically – True; selects best route using metrics – True", "Only the first statement is True", "Only the second statement is True", "All statements are False"], "c": [0]}, {"nr": 163, "q": "Match address ranges to address types. Which variant is correct?", "a": ["127.0.0.0–127.255.255.255 – Loopback; 192.168.0.0–192.168.255.255 – Private; 224.0.0.0–239.255.255.255 – Multicast", "127.0.0.0–127.255.255.255 – Multicast; 192.168.0.0–192.168.255.255 – Loopback; 224.0.0.0–239.255.255.255 – Private", "All ranges are public addresses", "All ranges are DNS server ranges"], "c": [0]}, {"nr": 164, "q": "IPv4 address statements. Which variant is correct?", "a": ["IPv4 has 64 bits – False; bits are divided into 8-bit octets – True; octet values can be 0–256 – False", "All statements are True", "IPv4 uses 128 bits; octets have 16 bits; values are 0–512", "All statements are False"], "c": [0]}, {"nr": 165, "q": "The ipconfig command will:", "a": ["Configure routers", "Configure DHCP clients", "Display a client's address", "Display a client's broadcast mode"], "c": [2]}, {"nr": 166, "q": "What command do you use to release the IP configuration handed out by a DHCP server?", "a": ["ipconfig /renew", "ipconfig /releasedns", "ipconfig /savestatic", "ipconfig /release"], "c": [3]}, {"nr": 167, "q": "What command do you use to reacquire IP configuration from a DHCP server?", "a": ["ipconfig /renew", "ipconfig /releasedns", "ipconfig /savestatic", "ipconfig /release"], "c": [0]}, {"nr": 168, "q": "List the four steps for a client to get an IP address from a DHCP server in the correct order.", "a": ["Discovery, offering, request, acknowledge", "Request, offering, discovery, acknowledge", "Discovery, request, offering, acknowledge", "Request, offering, discovery, acknowledge"], "c": [0]}, {"nr": 169, "q": "What protocol automatically configures IP configuration for a client?", "a": ["DNS", "DHCP", "WINS", "FTP"], "c": [1]}, {"nr": 170, "q": "Teredo tunneling is a protocol that:", "a": ["Translates IPv4 to IPv6", "Allows IPv6 connectivity through IPv4 devices", "Provides VPN security", "Dynamically allocates IPv6 addresses"], "c": [1]}, {"nr": 171, "q": "IPv6 statements. Which variant is correct?", "a": ["0:0:0:0:0:0:0:1 is loopback – True; FEC0::9C5A is site-local – True; FE80::F856:02AA is link-local – True", "Only loopback is True", "Only link-local is True", "All statements are False"], "c": [0]}, {"nr": 172, "q": "Which of these represents the IPv6 loopback address?", "a": ["127.0.0.1", "192.168.0.1", "FEC0:A8C0::AA01", "::1"], "c": [3]}, {"nr": 173, "q": "Which of these addresses is a multicast address?", "a": ["127.0.0.1", "169.254.0.1", "192.168.0.1", "224.0.0.1"], "c": [3]}, {"nr": 174, "q": "How many bits are there in an IPv6 address?", "a": ["32", "64", "128", "256"], "c": [2]}, {"nr": 175, "q": "IPv6 address validity. Which variant is correct?", "a": ["21DA:D3:0:2F3B:2AA:FF:FE28:9C5A – True; FE80::2AA:FF:FE28:9C5A – True; 21DA:02AA:::FF:FE28:9C5A – False", "All three are valid", "Only the last one is valid", "All are invalid"], "c": [0]}, {"nr": 176, "q": "IPv6 address statements. Which variant is correct?", "a": ["0:0:0:0:0:0:0:1 is loopback – True; FEC0::9C5A is site-local – True; FE80::F856:02AA is link-local – True", "Only first is True", "Only second is True", "All are False"], "c": [0]}, {"nr": 177, "q": "IPv6 general statements. Which variant is correct?", "a": ["IPv6 addresses are 64-bit – True; divided into 8-bit blocks – True; represented by dotted-decimal notation – True", "IPv6 addresses are 64-bit – False; divided into 8-bit blocks – False; represented by dotted-decimal notation – False", "Only dotted-decimal notation is True", "Only 8-bit blocks are True"], "c": [1]}, {"nr": 178, "q": "The default port used for SMTP is:", "a": ["23", "25", "80", "8080"], "c": [1]}, {"nr": 179, "q": "The default port used for Telnet is:", "a": ["23", "25", "80", "8080"], "c": [0]}, {"nr": 180, "q": "All session data is encrypted between all machines while using Telnet. What is correct instead?", "a": ["Not encrypted", "Encrypted between any Windows machines", "Encrypted only to any non-Windows machines", "No change is needed"], "c": [0]}, {"nr": 181, "q": "Which command displays the ports that your computer is listening for?", "a": ["nslookup", "nbtstat", "ping", "netstat"], "c": [3]}, {"nr": 182, "q": "Which of these ports does DHCP use?", "a": ["80", "67", "23", "500"], "c": [1]}, {"nr": 183, "q": "What port does DNS use?", "a": ["443", "389", "51", "53"], "c": [3]}, {"nr": 184, "q": "Which setting/tool is used to determine DNS settings on a client computer?", "a": ["TELNET", "NSLOOKUP", "PATHPING", "NETSTAT"], "c": [1]}, {"nr": 185, "q": "A service that resolves NetBIOS names to IP addresses is:", "a": ["Domain Name Service (DNS)", "Internet Service Provider (ISP)", "Address Resolution Protocol (ARP)", "Windows Internet Name Service (WINS)"], "c": [3]}, {"nr": 186, "q": "What type of DNS record maps host names to addresses?", "a": ["Mail Exchanger (MX) DNS record", "Service (SRV) DNS record", "Host (A) DNS record", "Canonical (CNAME) DNS record"], "c": [2]}, {"nr": 187, "q": "You can ping a server by IP address but not by FQDN. Why?", "a": ["PING is improperly configured", "The DNS is not resolving", "The DHCP server is offline", "NSLOOKUP is stopped"], "c": [1]}, {"nr": 188, "q": "A secondary zone is the first DNS zone to which all updates are written. What is correct instead?", "a": ["Primary zone", "Stub zone", "Conditional forwarding zone", "No change is needed"], "c": [0]}, {"nr": 189, "q": "Which of the following uses pointer records and A records?", "a": ["IDS", "DNS Server", "NAT Server", "IPS"], "c": [1]}, {"nr": 190, "q": "The top-level domain of www.adventureworks.com is:", "a": ["www", "adventureworks", "adventureworks.com", "com"], "c": [3]}, {"nr": 191, "q": "What type of record does DNS use to find a mail service?", "a": ["Service (SRV) DNS record", "Canonical (CNAME) DNS record", "Mail Exchanger (MX) DNS record", "Host (A) DNS record"], "c": [2]}, {"nr": 192, "q": "An ARP table is used to associate IP addresses with host names. What is correct instead?", "a": ["MAC addresses", "HomeGroup membership", "Preferred routers", "No change is needed"], "c": [0]}, {"nr": 193, "q": "The host name of the FQDN mail.exchange.corp.nwtraders.com is:", "a": ["corp", "com", "nwtraders", "exchange", "mail"], "c": [4]}, {"nr": 194, "q": "The service that resolves FQDNs to IP addresses is:", "a": ["Windows Internet Name Service (WINS)", "Domain Name Service (DNS)", "Internet Service Provider (ISP)", "Address Resolution Protocol (ARP)"], "c": [1]}, {"nr": 195, "q": "The process of replicating a zone file to multiple DNS servers is called zone replication. What is correct instead?", "a": ["Zone transfer", "Zone synchronization", "Start of authority", "No change is needed"], "c": [0]}, {"nr": 196, "q": "Which DNS record type specifies the host that is the authority for a given domain?", "a": ["NS", "MX", "CNAME", "SOA"], "c": [3]}, {"nr": 197, "q": "What DNS record type specifies an alias name of another address record?", "a": ["MX", "CNAME", "NS", "SOA"], "c": [1]}, {"nr": 198, "q": "The NTP value in a resource record indicates how long DNS servers cache information. What is correct instead?", "a": ["TTL", "GPS", "SOA RR", "No change is needed"], "c": [0]}, {"nr": 199, "q": "DNS query statements. Which variant is correct?", "a": ["Recursive query may contact other DNS servers – True; unresolved iterative query may escalate to root DNS – True; DNS server makes iterative query outside local domain if no forwarder – True", "Only the first statement is True", "Only the second statement is True", "All statements are False"], "c": [0]}, {"nr": 200, "q": "The ping tool is used to: Choose two.", "a": ["Determine the network portion of a host address", "Self-test a host's own network interface", "Determine whether a host is reachable", "Manage a host's session when UDP is used"], "c": [1, 2]}]}, "set5": {"title": "Test 5: Întrebări 201–246", "range": "201–246", "skipped": [], "questions": [{"nr": 201, "q": "Which of the following are features of DHCP? Choose two.", "a": ["IP address resolution to canonical names", "Secure shell connections", "Address reservation", "Network file transfer", "IP address exclusion"], "c": [2, 4]}, {"nr": 202, "q": "The command-line tool used to list a host's active incoming connections is:", "a": ["NETSTAT", "IPCONFIG", "NSLOOKUP", "PING"], "c": [0]}, {"nr": 203, "q": "A computer with IP address 169.254.0.1 cannot access the network. Which service should you confirm is available?", "a": ["WINS", "DNS", "DHCP", "TFTP"], "c": [2]}, {"nr": 204, "q": "When a client's DHCP-issued address expires, the client will:", "a": ["Select a new address and request approval from the DHCP server", "Require manual configuration with a static IP address", "Attempt to obtain a new address by broadcasting", "Continue to use the address until notified to stop"], "c": [2]}, {"nr": 205, "q": "Internet Key Exchange (IKE) is responsible for which two functions? Choose two.", "a": ["Establishing network speed parameters", "Verifying the client's patch level", "Negotiating algorithms to use", "Exchanging key information"], "c": [2, 3]}, {"nr": 206, "q": "Which command is used to verify that a server is connected to the network?", "a": ["IPCONFIG", "ROUTE", "PING", "CHECK"], "c": [2]}, {"nr": 207, "q": "The ipconfig command will:", "a": ["Configure routers", "Display a client's address", "Display a client's broadcast mode", "Configure DHCP clients"], "c": [1]}, {"nr": 208, "q": "To protect a network when it is connected to the Internet, you should use a:", "a": ["Bridge", "Firewall", "Switch", "Router"], "c": [1]}, {"nr": 209, "q": "Which service masks internal IP addresses from outside the network?", "a": ["DHCP", "WINS", "NAT", "DNS"], "c": [2]}, {"nr": 210, "q": "Tracert is used to:", "a": ["Manage routing tables dynamically", "Manage session-oriented connections between nodes", "Report the route taken by packets across an IP network", "Report the shortest route between different networks"], "c": [2]}, {"nr": 211, "q": "A school network uses DHCP. Settings are manual and websites do not work. Which changes are needed?", "a": ["Set IP address to manual and DNS to manual", "Obtain IP address automatically and obtain DNS server address automatically", "Only change the subnet mask", "Only disable DNS"], "c": [1]}, {"nr": 212, "q": "From the shown ipconfig output, the computer:", "a": ["Will have limited Internet access", "Will have full Internet access", "Will not be able to access the Internet", "Will not be able to access the local network"], "c": [2]}, {"nr": 213, "q": "For which two reasons should you use IPsec between computers? Choose two.", "a": ["Data compression", "Data integrity", "Data redundancy", "Data confidentiality"], "c": [1, 3]}, {"nr": 214, "q": "Which address indicates that a router's DHCP service is NOT functioning?", "a": ["169.254.1.15", "172.16.1.15", "192.168.1.15", "10.19.1.15"], "c": [0]}, {"nr": 215, "q": "A public-facing web server must be protected from the internal network. What should you do?", "a": ["Set the web server in a perimeter network", "Block access on ports 80 and 443 on the web server", "Configure the firewall to block ports 80 and 443", "Set the web server IP address within the LAN"], "c": [0]}, {"nr": 216, "q": "A computer has IP address 169.254.48.97 and cannot connect to resources. What should you do next?", "a": ["Flush the DNS server cache", "Reset the user's password", "Check router routing tables", "Verify that the DHCP service is available"], "c": [3]}, {"nr": 217, "q": "Which protocol can be used to encrypt packets on the Internet?", "a": ["SNMP", "HTTPS", "TFTP", "HTTP"], "c": [1]}, {"nr": 218, "q": "All session data is encrypted between all machines while using Telnet. What is correct instead?", "a": ["Not encrypted", "Encrypted between any Windows machines", "Encrypted only to any non-Windows machines", "No change is needed"], "c": [0]}, {"nr": 219, "q": "Which Microsoft network service can establish a connection to a corporate LAN without user action?", "a": ["VPN", "Remote Desktop", "DirectAccess", "NAP"], "c": [2]}, {"nr": 220, "q": "When a client cannot reach a DHCP server, it assigns an IP address in 10.0.0.0–10.0.0.255. What is correct instead?", "a": ["127.0.0.0–127.0.0.255", "169.254.0.0–169.254.255.255", "192.168.100.0–192.168.100.255", "No change is needed"], "c": [1]}, {"nr": 221, "q": "POTS, most ISDN lines, and switched T1 lines are examples of Message Switching. What is correct instead?", "a": ["Circuit Switching", "Packet Switching", "FDDI Switching", "No change is needed"], "c": [0]}, {"nr": 222, "q": "Trace route output statements. Which variant is correct?", "a": ["Each hop is a router; the trace route completed successfully", "Each hop is a switch; the trace route failed", "Each hop is a DNS server; the trace route completed successfully", "Each hop is a firewall; the trace route failed"], "c": [0]}, {"nr": 223, "q": "IPsec statements. Which variant is correct?", "a": ["Can secure communications between two machines – True; between two networks – True; traffic is always encrypted – False", "All statements are True", "Only the first statement is True", "All statements are False"], "c": [0]}, {"nr": 224, "q": "Tracert statements. Which variant is correct?", "a": ["Displays router addresses traversed – True; determines packet loss – False; displays routers for all active connections – False", "All statements are True", "Only packet loss is True", "All statements are False"], "c": [0]}, {"nr": 225, "q": "What protocol is used with L2TP to provide encryption?", "a": ["IPsec", "MPPE", "HTTPS", "MS-CHAP"], "c": [0]}, {"nr": 226, "q": "After installing DHCP servers and configuring/activating a scope, what is the last step?", "a": ["Register the scope", "Register the server", "Authorize the server", "Register the clients"], "c": [2]}, {"nr": 227, "q": "Based on ipconfig /all results, which variant is correct?", "a": ["Wireless adapter uses DHCP; Ethernet adapter uses APIPA", "Wireless adapter uses APIPA; Ethernet adapter uses DHCP", "Both adapters use static addresses", "Both adapters use DNS only"], "c": [0]}, {"nr": 228, "q": "A computer has address 169.254.32.23 and mask 255.255.0.0 but cannot connect to local file servers. What is most likely the problem?", "a": ["It cannot communicate with a DHCP server", "DNS servers are incorrect or down", "NetBIOS over TCP/IP is not enabled", "The network card is not connected properly"], "c": [0]}, {"nr": 229, "q": "What protocol is used with L2TP to encrypt data?", "a": ["IPSec", "MS-CHAP", "MS-CHAPv2", "MPPE"], "c": [0]}, {"nr": 230, "q": "Which IPSec component generates the encryption and authentication keys?", "a": ["SA", "AH", "EP", "MPPE"], "c": [0]}, {"nr": 231, "q": "Which IPSec component provides connectionless integrity and data authentication but not confidentiality?", "a": ["SA", "AH", "ESP", "MPPE"], "c": [1]}, {"nr": 232, "q": "Which IPSec component includes the most security, including confidentiality?", "a": ["SA", "AH", "ESP", "MPPE"], "c": [2]}, {"nr": 233, "q": "What service on a Windows network translates between NetBIOS/computer names and IP addresses?", "a": ["DNS", "WINS", "DHCP", "LDAP"], "c": [1]}, {"nr": 234, "q": "What provides name resolution between domain names and IP addresses?", "a": ["DHCP", "DNS", "ARP", "RPC"], "c": [1]}, {"nr": 235, "q": "What type of network can you set up that is another company’s internal network?", "a": ["Intranet", "Extranet", "Internet", "DMZ"], "c": [1]}, {"nr": 236, "q": "What command do you use to display and modify the network configuration of a local computer?", "a": ["netsh", "netstat", "telnet", "nbtstat"], "c": [0]}, {"nr": 237, "q": "What command is used to add static routes to a Windows computer?", "a": ["nslookup", "telnet", "route", "nbtstat"], "c": [2]}, {"nr": 238, "q": "What command do you use to display the routing table on a local system?", "a": ["route display", "route table", "route local", "route print"], "c": [3]}, {"nr": 239, "q": "What command do you use to display the MAC address on a system?", "a": ["ipconfig /all", "pathping -m", "route /showmac", "nbtstat -r"], "c": [0]}, {"nr": 240, "q": "What command do you use to retrieve or update your DHCP assigned configuration?", "a": ["ipconfig /flushdns", "ipconfig /all", "ipconfig /release", "ipconfig /renew"], "c": [3]}, {"nr": 241, "q": "What command do you use to register the computer’s name and IP address with the nearest DNS server?", "a": ["ipconfig /renew", "ipconfig /renew all", "ipconfig /flushdns", "ipconfig /registerdns"], "c": [3]}, {"nr": 242, "q": "What command displays Ethernet statistics?", "a": ["netstat -e", "netstat -x", "netstat -q", "netstat -t"], "c": [0]}, {"nr": 243, "q": "What option do you use to ping constantly until you stop it?", "a": ["ping -t <host>", "ping -q <host>", "ping -r <host>", "ping -s <host>"], "c": [0]}, {"nr": 244, "q": "What protocol is used with L2TP to encrypt data?", "a": ["IPsec", "MS-CHAP", "MS-CHAPv2", "MPPE"], "c": [0]}, {"nr": 245, "q": "What server is used to translate host names to IP addresses?", "a": ["DNS", "WINS", "HOSTS", "DHCP"], "c": [0]}, {"nr": 246, "q": "What command can you use to connect to a mail server so that you can test SMTP?", "a": ["ftp", "nslookup", "telnet", "nbtstat"], "c": [2]}]}};
-let currentTestId=null, questions=[], current=0, score=0, selected=[], checked=false, userAnswers=[], savedSelections=[];
+  const randuri = ["I","II","anual"];
+  const $ = (id) => document.getElementById(id);
 
-const menuBox=document.getElementById("menuBox"), quizBox=document.getElementById("quizBox"), resultBox=document.getElementById("resultBox");
-const menuGrid=document.getElementById("menuGrid"), testTitle=document.getElementById("testTitle"), questionEl=document.getElementById("question"), answersEl=document.getElementById("answers");
-const progressText=document.getElementById("progressText"), progressFill=document.getElementById("progressFill"), nextBtn=document.getElementById("nextBtn"), prevBtn=document.getElementById("prevBtn"), skipBtn=document.getElementById("skipBtn"), multiNote=document.getElementById("multiNote");
-const percentText=document.getElementById("percentText"), correctText=document.getElementById("correctText"), wrongText=document.getElementById("wrongText"), unansweredText=document.getElementById("unansweredText"), totalText=document.getElementById("totalText");
-const messageText=document.getElementById("messageText"), skippedInfo=document.getElementById("skippedInfo"), reviewList=document.getElementById("reviewList");
+  const el = {
+    clasa: $("clasa"),
+    nrElevi: $("nrElevi"),
+    oreSapt1: $("oreSapt1"),
+    nrSapt1: $("nrSapt1"),
+    oreSupl1: $("oreSupl1"),
+    oreSapt2: $("oreSapt2"),
+    nrSapt2: $("nrSapt2"),
+    oreSupl2: $("oreSupl2"),
+    perElev1: $("perElev1"),
+    perElev2: $("perElev2"),
+    perElevAnual: $("perElevAnual"),
+    totalAnual: $("totalAnual"),
+    formula: $("formula"),
+    tbody: $("tbody"),
+    validareText: $("validareText"),
+    btnExcel: $("btnExcel"),
+    btnWord: $("btnWord"),
+    btnReset: $("btnReset")
+  };
 
-function buildMenu(){
-  menuGrid.innerHTML="";
-  Object.keys(tests).forEach(id=>{
-    const t=tests[id];
-    const b=document.createElement("button");
-    b.className="test-link";
-    b.onclick=()=>startTest(id);
-    b.innerHTML="<strong>"+t.title+"</strong><span>"+t.questions.length+" întrebări. Interval original: "+t.range+". "+(t.skipped.length?("Sărite: "+t.skipped.length+"."):"Fără întrebări sărite.")+"</span>";
-    menuGrid.appendChild(b);
-  });
-  const totalAvailable=Object.values(tests).reduce((sum,t)=>sum+t.questions.length,0);
-  const mix=document.createElement("div");
-  mix.className="mixed-box";
-  mix.innerHTML=`<h3>Întrebări amestecate</h3>
-    <div class="mixed-row">
-      <input id="mixedCount" type="number" min="1" max="${totalAvailable}" value="50" placeholder="Nr. întrebări">
-      <button class="main" onclick="startMixedTestFromInput()">Susține testul</button>
-    </div>
-    <p>Poți introduce, de exemplu, 20, 50, 100 sau până la ${totalAvailable}. Întrebările se amestecă automat din toate secțiunile disponibile.</p>`;
-  menuGrid.parentNode.insertBefore(mix, menuGrid.nextSibling);
-}
+  const num = (v) => {
+    const x = Number(v);
+    return Number.isFinite(x) ? x : 0;
+  };
 
-function startTest(id){
-  currentTestId=id;
-  questions=[...tests[id].questions];
-  testTitle.textContent=tests[id].title;
-  resetState();
-}
+  const round2 = (x) => Math.round((x + Number.EPSILON) * 100) / 100;
+  const f2 = (x) => round2(x).toFixed(2);
 
-function startMixedTestFromInput(){
-  const all=Object.values(tests).flatMap(t=>t.questions);
-  const input=document.getElementById("mixedCount");
-  let count=parseInt(input.value,10);
-  if(isNaN(count) || count<1){ alert("Introdu un număr valid de întrebări."); return; }
-  if(count>all.length){ alert("Sunt disponibile doar "+all.length+" întrebări în total."); count=all.length; input.value=count; }
-  startMixedTest(count);
-}
+  function calculeaza(){
+    const ne = Math.max(0, num(el.nrElevi.value));
 
-function startMixedTest(count=50){
-  const all=Object.values(tests).flatMap(t=>t.questions);
-  const max=Math.min(count, all.length);
-  currentTestId="mixed";
-  questions=[...all].sort(()=>Math.random()-0.5).slice(0,max);
-  testTitle.textContent="Test final: Mixt "+max+" întrebări";
-  resetState();
-}
+    const os1 = Math.max(0, num(el.oreSapt1.value));
+    const ns1 = Math.max(0, num(el.nrSapt1.value));
+    const supl1 = Math.max(0, num(el.oreSupl1.value));
 
-function resetState(){
-  current=0; score=0; selected=[]; checked=false; userAnswers=[]; savedSelections=[];
-  menuBox.classList.add("hidden"); resultBox.classList.add("hidden"); quizBox.classList.remove("hidden");
-  loadQuestion();
-}
+    const os2 = Math.max(0, num(el.oreSapt2.value));
+    const ns2 = Math.max(0, num(el.nrSapt2.value));
+    const supl2 = Math.max(0, num(el.oreSupl2.value));
 
-function loadQuestion(){
-  const item=questions[current];
-  checked=!!userAnswers[current];
-  selected=savedSelections[current] ? [...savedSelections[current]] : [];
-  nextBtn.textContent=checked ? "Verificat" : "Verifică";
-  nextBtn.disabled=checked;
-  prevBtn.disabled=current===0;
-  skipBtn.textContent=current===questions.length-1 ? "Ultima întrebare" : "Întrebarea următoare";
-  skipBtn.disabled=current===questions.length-1;
-  questionEl.textContent=(current+1)+". "+item.q+" (nr. original: "+item.nr+")";
-  answersEl.innerHTML="";
-  multiNote.textContent=item.c.length>1 ? "Alege toate răspunsurile corecte. Sunt "+item.c.length+" răspunsuri corecte. Poți trece la următoarea întrebare și reveni mai târziu." : "Alege răspunsul corect. Poți trece la următoarea întrebare și reveni mai târziu.";
-  item.a.forEach((text,index)=>{
-    const btn=document.createElement("button");
-    btn.className="answer";
-    btn.textContent=String.fromCharCode(65+index)+". "+text;
-    if(selected.includes(index)) btn.classList.add("selected");
-    if(checked){
-      if(item.c.includes(index)) btn.classList.add("correct");
-      if(selected.includes(index) && !item.c.includes(index)) btn.classList.add("wrong");
+    const per1 = os1 * ns1 + supl1;
+    const per2 = os2 * ns2 + supl2;
+    const perAnual = per1 + per2;
+
+    const total1 = per1 * ne;
+    const total2 = per2 * ne;
+    const totalAnual = total1 + total2;
+
+    el.perElev1.textContent = per1;
+    el.perElev2.textContent = per2;
+    el.perElevAnual.textContent = perAnual;
+    el.totalAnual.textContent = totalAnual;
+    el.formula.textContent = `Sem. I: ${os1}×${ns1}+${supl1}=${per1}; Sem. II: ${os2}×${ns2}+${supl2}=${per2}`;
+
+    return { ne, per1, per2, perAnual, total1, total2, totalAnual, os1, ns1, supl1, os2, ns2, supl2 };
+  }
+
+  function valoriRand(tr){
+    return {
+      lipsa: Math.max(0, num(tr.querySelector('[data-in="lipsa"]').value)),
+      boala: Math.max(0, num(tr.querySelector('[data-in="boala"]').value)),
+      motiv: Math.max(0, num(tr.querySelector('[data-in="motiv"]').value)),
+      nemotiv: Math.max(0, num(tr.querySelector('[data-in="nemotiv"]').value))
+    };
+  }
+
+  function setValoriRand(tr, v){
+    tr.querySelector('[data-in="lipsa"]').value = v.lipsa;
+    tr.querySelector('[data-in="boala"]').value = v.boala;
+    tr.querySelector('[data-in="motiv"]').value = v.motiv;
+    tr.querySelector('[data-in="nemotiv"]').value = v.nemotiv;
+  }
+
+  function procente3(total, a, b, c){
+    if(total <= 0) return [0,0,0];
+
+    const vals = [a,b,c];
+    const raw = vals.map(v => (v / total) * 100);
+    let rounded = raw.map(x => round2(x));
+
+    if(a + b + c === total){
+      let diff = round2(100 - rounded.reduce((s,x)=>s+x,0));
+      if(diff !== 0){
+        let idx = 0;
+        for(let i=1;i<3;i++){
+          if(vals[i] > vals[idx]) idx = i;
+        }
+        rounded[idx] = round2(rounded[idx] + diff);
+      }
     }
-    btn.onclick=()=>toggleAnswer(index,btn);
-    answersEl.appendChild(btn);
-  });
-  progressText.textContent="Întrebarea "+(current+1)+"/"+questions.length;
-  progressFill.style.width=((current+1)/questions.length*100)+"%";
-}
-
-function toggleAnswer(index,btn){
-  if(checked) return;
-  const item=questions[current];
-  if(item.c.length===1){
-    selected=[index];
-    document.querySelectorAll(".answer").forEach(b=>b.classList.remove("selected"));
-    btn.classList.add("selected");
-  } else {
-    if(selected.includes(index)){ selected=selected.filter(x=>x!==index); btn.classList.remove("selected"); }
-    else { selected.push(index); btn.classList.add("selected"); }
+    return rounded;
   }
-  savedSelections[current]=[...selected];
-}
 
-function sameAnswers(a,b){
-  if(a.length!==b.length) return false;
-  const aa=[...a].sort((x,y)=>x-y), bb=[...b].sort((x,y)=>x-y);
-  return aa.every((v,i)=>v===bb[i]);
-}
+  function recalcRand(tr, totalClasa, nrElevi){
+    tr.children[1].textContent = nrElevi;
+    tr.children[2].textContent = totalClasa;
 
-function formatLetters(arr){
-  if(!arr || arr.length===0) return "fără răspuns";
-  return [...arr].sort((x,y)=>x-y).map(i=>String.fromCharCode(65+i)).join(", ");
-}
+    const v = valoriRand(tr);
 
-function checkOrNext(){
-  if(checked) return;
-  if(selected.length===0){ alert("Alege cel puțin un răspuns sau apasă «Întrebarea următoare» ca să revii mai târziu."); return; }
-  checked=true;
-  const item=questions[current], buttons=document.querySelectorAll(".answer");
-  buttons.forEach((btn,index)=>{
-    if(item.c.includes(index)) btn.classList.add("correct");
-    if(selected.includes(index) && !item.c.includes(index)) btn.classList.add("wrong");
-  });
-  const isCorrect=sameAnswers(selected,item.c);
-  savedSelections[current]=[...selected];
-  userAnswers[current]={question:item.q, originalNr:item.nr, selected:[...selected], correct:[...item.c], isCorrect:isCorrect, answered:true};
-  nextBtn.textContent="Verificat";
-  nextBtn.disabled=true;
-}
+    const frecv = totalClasa > 0 ? ((totalClasa - v.lipsa) / totalClasa) * 100 : 0;
+    tr.querySelector('[data-out="frecv"]').textContent = f2(Math.max(0, Math.min(100, frecv)));
 
-function goNextQuestion(){
-  if(!checked) savedSelections[current]=[...selected];
-  if(current<questions.length-1){
-    current++;
-    loadQuestion();
+    const lipsaElev = nrElevi > 0 ? (v.lipsa / nrElevi) : 0;
+    tr.querySelector('[data-out="lipsaElev"]').textContent = f2(lipsaElev);
+
+    const [pBoala, pMotiv, pNemotiv] = procente3(v.lipsa, v.boala, v.motiv, v.nemotiv);
+    tr.querySelector('[data-out="boalaPct"]').textContent = f2(pBoala);
+    tr.querySelector('[data-out="motivPct"]').textContent = f2(pMotiv);
+    tr.querySelector('[data-out="nemotivPct"]').textContent = f2(pNemotiv);
+
+    const sum = v.boala + v.motiv + v.nemotiv;
+    const inputs = [
+      tr.querySelector('[data-in="lipsa"]'),
+      tr.querySelector('[data-in="boala"]'),
+      tr.querySelector('[data-in="motiv"]'),
+      tr.querySelector('[data-in="nemotiv"]')
+    ];
+
+    inputs.forEach(i => i.classList.remove("red"));
+
+    if(v.lipsa > 0 && sum !== v.lipsa){
+      inputs.forEach(i => i.classList.add("red"));
+      return false;
+    }
+    return true;
   }
-}
 
-function prevQuestion(){
-  if(!checked) savedSelections[current]=[...selected];
-  if(current>0){
-    current--;
-    loadQuestion();
+  function recalcAll(){
+    const c = calculeaza();
+    const trs = Array.from(el.tbody.querySelectorAll("tr"));
+    const sem1 = trs.find(tr => tr.children[0].textContent.trim() === "I");
+    const sem2 = trs.find(tr => tr.children[0].textContent.trim() === "II");
+    const anual = trs.find(tr => tr.children[0].textContent.trim() === "anual");
+
+    const v1 = valoriRand(sem1);
+    const v2 = valoriRand(sem2);
+
+    const anualVal = {
+      lipsa: v1.lipsa + v2.lipsa,
+      boala: v1.boala + v2.boala,
+      motiv: v1.motiv + v2.motiv,
+      nemotiv: v1.nemotiv + v2.nemotiv
+    };
+    setValoriRand(anual, anualVal);
+
+    let ok = true;
+    ok = recalcRand(sem1, c.total1, c.ne) && ok;
+    ok = recalcRand(sem2, c.total2, c.ne) && ok;
+    ok = recalcRand(anual, c.totalAnual, c.ne) && ok;
+
+    if(ok){
+      el.validareText.innerHTML = 'Validare: <b>boală + motivate + nemotivate</b> este egal cu <b>ore lipsă total</b>.';
+      el.validareText.classList.remove("warn");
+    }else{
+      el.validareText.innerHTML = 'Atenție: <b>boală + motivate + nemotivate</b> trebuie să fie egal cu <b>ore lipsă total</b>. Verificați câmpurile marcate cu roșu.';
+      el.validareText.classList.add("warn");
+    }
   }
-}
 
-function finishNow(){
-  if(confirm("Sigur vrei să termini testul acum? Întrebările fără răspuns se vor calcula ca greșite.")) showResult();
-}
+  function construieste(){
+    const c = calculeaza();
 
-function showResult(){
-  quizBox.classList.add("hidden"); resultBox.classList.remove("hidden"); progressFill.style.width="100%";
-  let correct=0, unanswered=0;
-  const reviewData=questions.map((q,i)=>{
-    const r=userAnswers[i];
-    if(!r){ unanswered++; return {question:q.q, originalNr:q.nr, selected:[], correct:q.c, isCorrect:false, answered:false}; }
-    if(r.isCorrect) correct++;
-    return r;
+    const old = {};
+    el.tbody.querySelectorAll("tr").forEach(tr => {
+      const sem = tr.children[0].textContent.trim();
+      old[sem] = valoriRand(tr);
+    });
+
+    el.tbody.innerHTML = "";
+
+    randuri.forEach(sem => {
+      const keep = old[sem] || {lipsa:0, boala:0, motiv:0, nemotiv:0};
+      const isAnnual = sem === "anual";
+      const totalOre = sem === "I" ? c.total1 : sem === "II" ? c.total2 : c.totalAnual;
+
+      const tr = document.createElement("tr");
+      if(isAnnual) tr.classList.add("annual");
+
+      tr.innerHTML = `
+        <td>${sem}</td>
+        <td class="num">${c.ne}</td>
+        <td class="num">${totalOre}</td>
+
+        <td class="center"><input type="number" min="0" step="1" value="${keep.lipsa}" data-in="lipsa" ${isAnnual ? "readonly" : ""}></td>
+        <td class="num" data-out="frecv">0.00</td>
+        <td class="num" data-out="lipsaElev">0.00</td>
+
+        <td class="center"><input type="number" min="0" step="1" value="${keep.boala}" data-in="boala" ${isAnnual ? "readonly" : ""}></td>
+        <td class="num" data-out="boalaPct">0.00</td>
+
+        <td class="center"><input type="number" min="0" step="1" value="${keep.motiv}" data-in="motiv" ${isAnnual ? "readonly" : ""}></td>
+        <td class="num" data-out="motivPct">0.00</td>
+
+        <td class="center"><input type="number" min="0" step="1" value="${keep.nemotiv}" data-in="nemotiv" ${isAnnual ? "readonly" : ""}></td>
+        <td class="num" data-out="nemotivPct">0.00</td>
+      `;
+
+      if(isAnnual){
+        tr.querySelectorAll("input").forEach(inp => inp.classList.add("readonly"));
+      }else{
+        tr.querySelectorAll("input").forEach(inp => inp.addEventListener("input", recalcAll));
+      }
+
+      el.tbody.appendChild(tr);
+    });
+
+    recalcAll();
+  }
+
+  function colecteazaRand(tr){
+    return [
+      tr.children[0].textContent.trim(),
+      tr.children[1].textContent.trim(),
+      tr.children[2].textContent.trim(),
+      tr.querySelector('[data-in="lipsa"]').value,
+      tr.querySelector('[data-out="frecv"]').textContent.trim(),
+      tr.querySelector('[data-out="lipsaElev"]').textContent.trim(),
+      tr.querySelector('[data-in="boala"]').value,
+      tr.querySelector('[data-out="boalaPct"]').textContent.trim(),
+      tr.querySelector('[data-in="motiv"]').value,
+      tr.querySelector('[data-out="motivPct"]').textContent.trim(),
+      tr.querySelector('[data-in="nemotiv"]').value,
+      tr.querySelector('[data-out="nemotivPct"]').textContent.trim()
+    ];
+  }
+
+  function exportExcel(){
+    recalcAll();
+
+    const aoa = [
+      ["Semestrul","Nr. elevi","Nr. ore ce trebuiau frecventate","Ore lipsă (total)","Frecvența %","Ore lipsă / elev",
+       "Boală (ore)","Boală (%)","Motivate (ore)","Motivate (%)","Nemotivate (ore)","Nemotivate (%)"]
+    ];
+
+    el.tbody.querySelectorAll("tr").forEach(tr => aoa.push(colecteazaRand(tr)));
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws["!cols"] = [
+      {wch:14},{wch:10},{wch:28},{wch:18},{wch:14},{wch:15},
+      {wch:13},{wch:10},{wch:14},{wch:12},{wch:15},{wch:12}
+    ];
+    XLSX.utils.book_append_sheet(wb, ws, "Raport");
+
+    const c = calculeaza();
+    const meta = [
+      ["Clasa", el.clasa.value],
+      ["Nr. elevi", c.ne],
+      ["Ore / săptămână sem. I", c.os1],
+      ["Nr. săptămâni sem. I", c.ns1],
+      ["Ore suplimentare sem. I", c.supl1],
+      ["Ore per elev sem. I", c.per1],
+      ["Total ore clasă sem. I", c.total1],
+      ["Ore / săptămână sem. II", c.os2],
+      ["Nr. săptămâni sem. II", c.ns2],
+      ["Ore suplimentare sem. II", c.supl2],
+      ["Ore per elev sem. II", c.per2],
+      ["Total ore clasă sem. II", c.total2],
+      ["Ore per elev anual", c.perAnual],
+      ["Total ore clasă anual", c.totalAnual]
+    ];
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(meta), "Parametri");
+
+    XLSX.writeFile(wb, `raport_frecventa_${(el.clasa.value||"clasa").trim()}.xlsx`);
+  }
+
+  function exportWord(){
+    recalcAll();
+
+    const c = calculeaza();
+    const esc = s => String(s ?? "").replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+
+    let rowsHtml = "";
+    el.tbody.querySelectorAll("tr").forEach(tr => {
+      const r = colecteazaRand(tr);
+      rowsHtml += `
+        <tr>
+          <td>${esc(r[0])}</td>
+          <td style="text-align:right;">${esc(r[1])}</td>
+          <td style="text-align:right;">${esc(r[2])}</td>
+          <td style="text-align:right;">${esc(r[3])}</td>
+          <td style="text-align:right;">${esc(r[4])}</td>
+          <td style="text-align:right;">${esc(r[5])}</td>
+          <td style="text-align:right;">${esc(r[6])}</td>
+          <td style="text-align:right;">${esc(r[7])}</td>
+          <td style="text-align:right;">${esc(r[8])}</td>
+          <td style="text-align:right;">${esc(r[9])}</td>
+          <td style="text-align:right;">${esc(r[10])}</td>
+          <td style="text-align:right;">${esc(r[11])}</td>
+        </tr>
+      `;
+    });
+
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office"
+            xmlns:w="urn:schemas-microsoft-com:office:word"
+            xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <meta charset="utf-8">
+        <style>
+          @page Section1 { size: 29.7cm 21cm; margin: 1.2cm 1.2cm 1.2cm 1.2cm; mso-page-orientation: landscape; }
+          div.Section1 { page: Section1; }
+          body{font-family:"Times New Roman",serif;color:#000;}
+          h2,h3{margin:0;text-align:center;}
+          h3{font-weight:normal;margin-top:6px;}
+          table{width:100%;border-collapse:collapse;font-size:10pt;margin-top:14px;}
+          td,th{border:1px solid #000;padding:5px;vertical-align:middle;}
+          th{background:#eef2f7;text-align:center;}
+          .meta{margin-top:10px;font-size:11pt;}
+        </style>
+      </head>
+      <body>
+      <div class="Section1">
+        <h2>Raport</h2>
+        <h3>cu privire la frecvența elevilor</h3>
+        <h3>anul de studii 2025-2026</h3>
+
+        <div class="meta">
+          <p>Clasa: <b>${esc(el.clasa.value)}</b></p>
+          <p>Semestrul I: ${esc(c.os1)}×${esc(c.ns1)} + ${esc(c.supl1)} = <b>${esc(c.per1)}</b> ore per elev; total clasă: <b>${esc(c.total1)}</b>.</p>
+          <p>Semestrul II: ${esc(c.os2)}×${esc(c.ns2)} + ${esc(c.supl2)} = <b>${esc(c.per2)}</b> ore per elev; total clasă: <b>${esc(c.total2)}</b>.</p>
+          <p>Total anual per elev: <b>${esc(c.perAnual)}</b>; total anual clasă: <b>${esc(c.totalAnual)}</b>.</p>
+        </div>
+
+        <table>
+          <tr>
+            <th>Semestrul</th>
+            <th>Nr. elevi</th>
+            <th>Ore ce trebuiau frecventate</th>
+            <th>Ore lipsă</th>
+            <th>Frecvența %</th>
+            <th>Ore lipsă/elev</th>
+            <th>Boală</th><th>%</th>
+            <th>Motivate</th><th>%</th>
+            <th>Nemotivate</th><th>%</th>
+          </tr>
+          ${rowsHtml}
+        </table>
+
+        <p style="margin-top:18px;">Diriginte: ____________________________</p>
+      </div>
+      </body></html>
+    `;
+
+    const blob = new Blob([html], { type: "application/msword;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `raport_frecventa_${(el.clasa.value||"clasa").trim()}_landscape.doc`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function resetAll(){
+    el.clasa.value = "12B";
+    el.nrElevi.value = 33;
+    el.oreSapt1.value = 27;
+    el.nrSapt1.value = 18;
+    el.oreSupl1.value = 0;
+    el.oreSapt2.value = 27;
+    el.nrSapt2.value = 16;
+    el.oreSupl2.value = 0;
+    construieste();
+  }
+
+  [el.nrElevi, el.oreSapt1, el.nrSapt1, el.oreSupl1, el.oreSapt2, el.nrSapt2, el.oreSupl2].forEach(inp => {
+    inp.addEventListener("input", () => construieste());
   });
-  const total=questions.length, wrong=total-correct, percent=Math.round(correct/total*100);
-  percentText.textContent=percent+"%"; correctText.textContent=correct; wrongText.textContent=wrong; unansweredText.textContent=unanswered; totalText.textContent=total;
-  messageText.textContent = percent>=80 ? "Foarte bine! Rezultatul este aproape de nivelul dorit pentru examen." : (percent>=60 ? "Bine, dar mai trebuie repetate întrebările greșite." : "Mai ai de exersat. Repetă întrebările greșite și încearcă din nou.");
-  const skipped = currentTestId==="mixed" ? Object.values(tests).flatMap(t=>t.skipped) : (tests[currentTestId]?.skipped || []);
-  skippedInfo.innerHTML="<strong>Întrebări sărite deoarece necesitau imagine/diagramă:</strong><br>"+(skipped.length?skipped.join("<br>"):"Nu sunt întrebări sărite în acest set.");
-  reviewList.innerHTML="<h3>Rezumat răspunsuri</h3>";
-  reviewData.forEach((r,index)=>{
-    const div=document.createElement("div");
-    div.className="review-item";
-    const cls = !r.answered ? "miss" : (r.isCorrect ? "ok" : "bad");
-    const label = !r.answered ? "Fără răspuns" : (r.isCorrect ? "Corect" : "Greșit");
-    div.innerHTML="<span class='"+cls+"'>"+label+"</span><br><strong>"+(index+1)+". "+r.question+" (nr. original: "+r.originalNr+")</strong><br>Răspunsul tău: "+formatLetters(r.selected)+"<br>Răspuns corect: "+formatLetters(r.correct);
-    reviewList.appendChild(div);
-  });
-}
 
-function restartCurrentTest(){
-  if(currentTestId==="mixed") startMixedTest(questions.length); else startTest(currentTestId);
-}
+  el.btnExcel.addEventListener("click", exportExcel);
+  el.btnWord.addEventListener("click", exportWord);
+  el.btnReset.addEventListener("click", resetAll);
 
-function backToMenu(){
-  quizBox.classList.add("hidden"); resultBox.classList.add("hidden"); menuBox.classList.remove("hidden");
-}
-
-buildMenu();
+  construieste();
 </script>
 </body>
 </html>
